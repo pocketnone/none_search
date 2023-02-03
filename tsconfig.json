@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "sourceMap": true,
+    "outDir": "dist",
+  },
+  "include": [
+    "src/**/*",
+    "shemas/**/*",
+    "static/**/*",
+    "views/**/*",
+    "index.ts",
+    "routes/**/*",
+    ".env",
+    "core",
+    "server.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

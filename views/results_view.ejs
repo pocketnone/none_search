@@ -1,0 +1,63 @@
+<head>
+
+</head>
+<body class="bg-gray-900 text-white">
+<nav class="flex items-center justify-between px-4 py-3 bg-gray-800">
+    <div class="flex-1">
+
+    </div>
+    <div class="relative">
+        <form action="/search" method="post">
+            <input type="text" class="w-64 px-4 py-2 text-gray-100 bg-gray-700 rounded-full focus:outline-none"
+                   placeholder="<%= typeof result.search != 'undefined' ? result.search: '' %>" name="search">
+            <button class="absolute right-0 top-0 mt-3 mr-3">
+                <svg class="w-4 h-4 text-gray-100" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
+                </svg>
+            </button>
+        </form>
+    </div>
+    <!--Search Results-->
+    <div>
+        <%= result.resultlist.forEach(function (resultlist) { %>
+        <a href="<%- resultlist.url %>" class="w-[30rem] border-2 border-b-4 border-gray-200 rounded-xl hover:bg-gray-50">
+            <div class="grid grid-cols-6 p-5 gap-y-2">
+                <!-- Profile Picture -->
+                <div>
+                    <img src="<%- resultlist.icon %>" class="max-w-16 max-h-16 rounded-full" />
+                </div>
+                <!-- Description -->
+                <div class="col-span-5 md:col-span-4 ml-4">
+                    <%- if(resultlist.webpage_offical){ %>
+                        <p class="text-green-600 font-bold"><%= resultlist.title %></p>
+                    <%- } else {%>
+                        <p class="text-gray-600 font-bold"><%= resultlist.title %></p>
+                    <%- }%>
+                    <p class="text-gray-400"><%= resultlist.url %></p>
+                    <p class="text-gray-400"><%= resultlist.contente_preview %></p>
+                </div>
+
+                <%- if(resultlist.webpage_offical){ %>
+                <!-- Verifiyed -->
+                <div class="flex col-start-2 ml-4 md:col-start-auto md:ml-0 md:justify-end">
+                    <p class="rounded-lg text-sky-500 font-bold bg-sky-100  py-1 px-3 text-sm w-fit h-fit">Offical</p>
+                </div>
+                <%- } %>
+            </div>
+        </a>
+        <%= }; %>
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="inline-flex -space-x-px">
+            <li>
+                <a href="https://none.mba/seatch/<%= result.searchterm %>/<%= result.oldPage %>"
+                   class="bg-white border border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700 ml-0 rounded-l-lg leading-tight py-2 px-3 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+            </li>
+            <li>
+                <a href="https://none.mba/seatch/<%= result.searchterm %>/<%= result.addPage %>"
+                   class="bg-white border border-gray-300 text-gray-500 hover:bg-gray-100 hover:text-gray-700 rounded-r-lg leading-tight py-2 px-3 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+            </li>
+        </ul>
+    </nav>
+</nav>
+</body>
