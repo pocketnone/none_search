@@ -31,7 +31,7 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 app.set('view engine', 'ejs');
 
 // Set Public Folder
-app.use(express.static('static'));
+app.use(express.static('./static'));
 
 //Set View Folder
 app.set('views', 'views');
@@ -69,7 +69,7 @@ const PORT = process.env.PORT || 3000;
 // Create Server with Port and Error Handling
 const server = createServer(app);
 server.listen(PORT, () => {
-    console.log(`Server running on http://localhost${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
 
 
@@ -79,4 +79,4 @@ const crawler = new Crawler();
 crawler.Crawler().then(() => {
     console.log('Crawler finished');
 });
-*/
+ */

@@ -6,14 +6,14 @@ import axios from 'axios';
 export class Crawler {
     public async Crawler() {
         const toVisit = new Set([
+            "https://www.discord.com/",
             "https://moz.com/top500",
             "https://www.spotify.com/",
             "https://www.tiktok.com/",
             "https://www.twitter.com/",
             "https://www.wikipedia.org/",
             "https://www.yahoo.com/",
-            "https://www.youtube.com/",
-            "https://www.discord.com/"
+            "https://www.youtube.com/"
         ]);
 
         while (toVisit.size > 0) {
@@ -25,8 +25,20 @@ export class Crawler {
                 try{
                     const nextURL = new URL(link);
                     toVisit.add(nextURL.toString());
-                } catch (e) {
-                    console.log(e);
+
+                } catch {
+                   // console.log(e);
+                    //console.log(toVisit.size);
+                }
+                if(toVisit.size > 3000){
+                    // For toVisit size = 1000 crawl page
+                    for(const link of toVisit){
+                        const links = await Crawler.crawlPage(url);
+                        toVisit.delete(link);
+                        if(toVisit.size == 1000){
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -44,7 +56,7 @@ export class Crawler {
             // Saving Memory
             html = null;
             response = null;
-            console.log($("title").text());
+            //console.log($("title").text());
 
             const links = $('a').map((i, el) => $(el).attr('href')).get();;
             const uniqueLinks = Array.from(new Set([...links, ...(await Crawler.getRobotsTxtLinks(origin_url))]));
@@ -59,17 +71,15 @@ export class Crawler {
                 await Crawler.index(url, origin_url, title,
                     description, keywords, author, icon,
                     content_preview);
-            } catch (error) {
-                console.log(`Error B: ${error}`);
+            } catch{
+                //console.log(`Error B: ${error}`);
             }
             return uniqueLinks;
         } catch (error) {
-            console.log(`Error B: ${error}`);
+            //console.log(`Error B: ${error}`);
             return [];
         }
     }
-
-
 
     private static async index(url: string, origin_url: string, title: string, description: string,
           keywords: string, author: string, icon: string,
@@ -77,14 +87,14 @@ export class Crawler {
 
         // Check if any value is null
         if (url == null || origin_url == null || title == null || description == null || keywords == null || author == null || icon == null) {
-            console.log('One or more values are null');
+            //console.log('One or more values are null');
             return 0;
         }
 
        const data = await databse.findOne({url: url});
 
         if(data) {
-            console.log('Document already exists')
+            //console.log('Document already exists')
             return 1;
         } else {
             new databse({
@@ -96,7 +106,8 @@ export class Crawler {
                 author: author,
                 icon: icon,
                 content_preview: content_preview
-            }).save().then(() => console.log('New document created'));
+            }).save().then(() => {});
+
         }
     }
 

@@ -12,62 +12,17 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 router.get('/', (req, res) => {
-    res.render('index');
+    return res.render('index');
 });
 
 
 router.post('/search', async (req, res) => {
    const { search } = req.body;
-
-    let resultlist;
-    let ChatGPTAwenser;
-    let nextPage;
-    const limit = 50;
-
-
-   // If Searchbos end with ? then ask ChatGPT
-    if(search.endsWith('?')) {
-        const completion = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: search,
-            temperature: 0.9,
-            max_tokens: 1000,
-            stream: false,
-        });
-        ChatGPTAwenser = completion.data.choices[0].text.replace('?', "");
+    if(!search) {
+        res.redirect('/');
+    } else {
+        res.redirect(`/search/${search}`);
     }
-
-    // Search in Database
-    if(search) {
-        index.find({
-            $or: [
-                { url: { $regex: search, $options: 'i' } },
-                { title: { $regex: search, $options: 'i' } },
-                { description: { $regex: search, $options: 'i' } },
-                { keywords: { $regex: search, $options: 'i' } }
-            ]
-        }).sort({webpage_offical: -1, webpage_flagged: 1})
-            .limit(limit).exec(
-            (err, results) => {
-                if (err) {
-                    console.error(err);
-                } else {
-                    if(results.length > limit) {
-                        nextPage = true;
-                    }
-                    resultlist = results;
-                }
-            });
-    }
-
-    const result = {
-        resultlist,
-        ChatGPTAwenser,
-        nextPage,
-        searchterm: search
-    }
-
-    res.render('results_view', { result });
 });
 
 
@@ -80,9 +35,8 @@ router.get('/search/:term', async (req, res) => {
 
     const search = encodeURIComponent(term);
 
-    let resultlist;
-    let ChatGPTAwenser;
-    let nextPage;
+    var ChatGPTAwenser = 'NONE';
+    var nextPage;
 
     if(search.endsWith('?')) {
         const completion = await openai.createCompletion({
@@ -94,13 +48,13 @@ router.get('/search/:term', async (req, res) => {
         });
         ChatGPTAwenser = completion.data.choices[0].text.replace('?', "");
     }
-
+    const seachtTerm = search.replace('?', "").split(' ');
     index.find({
         $or: [
-            { url: { $regex: search, $options: 'i' } },
-            { title: { $regex: search, $options: 'i' } },
-            { description: { $regex: search, $options: 'i' } },
-            { keywords: { $regex: search, $options: 'i' } }
+            { url: { $regex: new RegExp(seachtTerm.join("|"), "i") } },
+            { title: { $regex: new RegExp(seachtTerm.join("|"), "i") } },
+            { description: { $regex: new RegExp(seachtTerm.join("|"), "i") } },
+            { keywords: { $regex: new RegExp(seachtTerm.join("|"), "i")} }
         ]
     })
         .sort({webpage_offical: -1, webpage_flagged: 1})
@@ -112,19 +66,15 @@ router.get('/search/:term', async (req, res) => {
                 if(results.length > 50) {
                     nextPage = true;
                 }
-                resultlist = results;
+                res.render('results_view', {
+                    results,
+                    ChatGPTAwenser,
+                    nextPage,
+                    searchterm: search
+                });
             }
         });
 
-    const result = {
-        resultlist,
-        ChatGPTAwenser,
-        nextPage,
-        searchterm: search
-    }
-
-
-    res.render('results_view', { result });
 })
 
 
@@ -153,17 +103,17 @@ router.get('/search/:term/:page', (req, res) => {
     const itemsPerPage = 50;
     const skip = (page_number - 1) * itemsPerPage;
 
-    let resultlist;
-    let nextPage;
-    let addPage = page + 1;
+    var resultlist;
+    var nextPage;
+    var addPage = page + 1;
     const oldPage = page - 1;
-
+    const seachtTerm = search.replace('?', "").split(' ');
     index.find({
         $or: [
-            { url: { $regex: search, $options: 'i' } },
-            { title: { $regex: search, $options: 'i' } },
-            { description: { $regex: search, $options: 'i' } },
-            { keywords: { $regex: search, $options: 'i' } }
+            { url: { $regex: new RegExp(seachtTerm.join("|"), "i") } },
+            { title: { $regex: new RegExp(seachtTerm.join("|"), "i") } },
+            { description: { $regex: new RegExp(seachtTerm.join("|"), "i") } },
+            { keywords: { $regex: new RegExp(seachtTerm.join("|"), "i")} }
         ]
     }).sort({webpage_flagged: 1})
         .skip(skip).limit(50).exec(
@@ -178,7 +128,7 @@ router.get('/search/:term/:page', (req, res) => {
             }
         });
 
-    const result = {
+    return res.render('results_view_pages', {
         resultlist,
         nextPage,
         search,
@@ -186,8 +136,7 @@ router.get('/search/:term/:page', (req, res) => {
         serchpage: page,
         addPage,
         oldPage
-    }
-    res.render('results_view', { result });
+    });
 })
 
 // export router

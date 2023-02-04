@@ -1,24 +1,89 @@
+
 <head>
-    <title>NONE Search</title>
+    <title>None Search</title>
+    <%- include('./include/header.ejs'); %>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto:400,400italic,700');
+        @import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700"');
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        body {
+            padding: 100px;
+            background: linear-gradient(159deg, rgb(17, 17, 30) 0%, rgba(96,31,85,1) 50%, rgba(29,30,34,1) 100%);
+        }
+
+        #heading {
+            color: #fff;
+            font-family: 'Inconsolata'
+        }
+
+        .custom-search form {
+            padding: 0;
+            margin: 0;
+        }
+
+        .custom-search input {
+            font-family: 'Roboto';
+            font-size: 15px;
+            margin: 0;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            background: #1d1e22;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all .2s ease;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .custom-search input:hover {
+            background: #141729
+        }
+
+        .custom-search input:focus {
+            background: #141729;
+            color: #ffffff;
+            outline: none;
+        }
+
+        .foot {
+            padding: 30px;
+        }
+
+        .foot a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-family: 'Roboto';
+        }
+
+        .foot a:hover {
+            color: #4e64b0;
+        }
+    </style>
+
 </head>
-<body class="bg-gray-900 text-white">
-    <div class="fixed top-0 left-0 p-4">
-        <a href="https://www.patreon.com/none_dev" class="text-white bg-gray-900 rounded p-2 hover:bg-gray-800">Patreon</a>
-        <a href="https://github.com/pocketnone/none_search" class="text-white bg-gray-900 rounded p-2 hover:bg-gray-800 ml-4">Github</a>
-    </div>
-    <div class="pt-2 relative mx-auto text-gray-600">
-        <form method="post" action="/search">
-            <input class="border-2 border-blue-300 bg-gray-800 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-                   type="search" name="search" placeholder="Search">
-            <button type="submit" class="absolute right-0 top-0 mt-5 mr-4">
-                <svg class="text-gray-600 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
-                     viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve"
-                     width="512px" height="512px">
-            <path
-                    d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
-          </svg>
-            </button>
+<body >
+<script src="/background.js"></script>
+<center>
+    <h1 id='heading'>None search engine</h1>
+    <div class='custom-search'>
+        <form id='searchform' action='/search' method="post">
+            <input id='search-form' name='search' type='text' placeholder='Search here ...' />
         </form>
     </div>
+    <div class='foot'>
+        <a href='https://www.openai.com' target='_blank'>Powered by Open AI</a><br>
+        <a href='https://www.patreon.com/none_dev' target='_blank'>Support on Patreon</a>
+    </div>
+</center>
+
+
 </body>
