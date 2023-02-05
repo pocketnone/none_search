@@ -14,7 +14,7 @@
     "index.ts",
     "routes/**/*",
     ".env",
-    "core",
+    "core/crawler/crawler.ts",
     "server.ts"
   ],
   "exclude": [
