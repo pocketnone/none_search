@@ -70,11 +70,10 @@ router.get('/search/:term', async (req, res) => {
                     results,
                     ChatGPTAwenser,
                     nextPage,
-                    searchterm: search
+                    term
                 });
             }
         });
-
 })
 
 
@@ -124,19 +123,20 @@ router.get('/search/:term/:page', (req, res) => {
                 if(results.length > itemsPerPage) {
                     nextPage = true;
                 }
-                resultlist = results;
+
+                return res.render('results_view_pages', {
+                    results,
+                    nextPage,
+                    search,
+                    searchterm: term,
+                    serchpage: page,
+                    addPage,
+                    oldPage
+                });
             }
         });
 
-    return res.render('results_view_pages', {
-        resultlist,
-        nextPage,
-        search,
-        searchterm: term,
-        serchpage: page,
-        addPage,
-        oldPage
-    });
+
 })
 
 // export router

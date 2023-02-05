@@ -1,11 +1,166 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title>My First Web Page</title>
+    <title>Results</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Roboto:400,400italic,700');
+
+        /* width */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 5px grey;
+            border-radius: 8px;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: red;
+            border-radius: 8px;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b30000;
+        }
+        body {
+            background-color: rgb(17, 17, 30);
+            font-family: 'Roboto';
+        }
+        nav {
+            background-color: black;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 20px;
+            border-radius: 25px;
+        }
+
+        nav form {
+            display: flex;
+            align-items: center;
+            border-radius: 25px;
+            background-color: black;
+            padding: 10px;
+        }
+
+        nav input[type="text"] {
+            border: none;
+            background-color: rgb(17, 17, 30);
+            padding: 10px;
+            border-radius: 20px;
+            width: 500px;
+        }
+
+        /* CSS für Suchergebnisse */
+        .results {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+            color: #fff;
+        }
+
+        .result {
+            width: 500px;
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 2px 2px 5px blue;
+            margin: 20px;
+            transition: all 0.3s;
+        }
+
+        .result:hover {
+            transform: scale(1.00001);
+            box-shadow: 5px 5px 10px red;
+        }
+
+        /* CSS für Textbox neben Suchergebnissen */
+        .textbox {
+            background-color: lightgray;
+            width: 200px;
+            height: 300px;
+            margin: 20px;
+            padding: 20px;
+            text-align: center;
+            border-radius: 25px;
+            box-shadow: 2px 2px 5px gray;
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            transition: all 0.3s;
+        }
+
+        .textbox:hover {
+            transform: scale(1.1);
+            box-shadow: 5px 5px 10px gray;
+        }
+
+        /* CSS für Buttons am Ende der Seite */
+        .buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        button {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            margin: 0 10px;
+        }
+
+        .title-link {
+            color: #7382cb;
+        }
+    </style>
 </head>
 <body>
-<% resultlist %>
-<% nextPage %>
-<% search %>
-<% %>
+<!-- Navbar -->
+<nav>
+    <form action="/search">
+        <input type="text" name="search" placeholder="Search...">
+        <button>Search</button>
+    </form>
+</nav>
+
+<!-- Suchergebnisse -->
+<% results.forEach((data)  => { %>
+    <div class="results">
+        <div class="result">
+            <% if(!data.title) { %>
+                <h3><a href="<%- data.url %>" class="title-link"><%- data.url %></a></h3>
+            <% } else { %>
+                <h3><a href="<%- data.url %>" class="title-link"><%- data.title %></a></h3>
+            <% } %>
+
+            <p style="font-size: 12px;"><%- data.origin_url %></p>
+
+            <% if(!data.contente_preview && data.description !== "Unknown") { %>
+                <p><%- data.description %></p>
+            <% } else if(!data.contente_preview) { %>
+                <p><%- data.contente_preview %></p>
+            <% } else { %>
+                <br>
+            <% } %>
+            <% if(data.webpage_offical) { %>
+                <p style="color: green;">Verifyed</p>
+            <% } %>
+        </div>
+    </div>
+<% })%>
+<div class="buttons">
+    <a href="/search/<% searchterm %>/<% oldPage %>"><button>Zurück</button></a>
+    <% if(nextPage) { %>
+        <a href="/search/<% searchterm %>/<% addPage %>"><button>Weiter</button></a>
+   <% } %>
+
+</div>
 </body>
 </html>
