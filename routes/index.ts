@@ -12,7 +12,16 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 router.get('/', (req, res) => {
-    return res.render('index');
+
+    index.countDocuments({}, (err, count) => {
+        if(err) {
+            console.error(err);
+        } else {
+            return res.render('index', {
+                count
+            });
+        }
+    });
 });
 
 
